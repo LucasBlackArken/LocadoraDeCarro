@@ -1,3 +1,11 @@
+using LocadoraDeCarro.Domain.Interfaces;
+using LocadoraDeCarro.Domain.Repository;
+using LocadoraDeCarro.IdentityServer;
+using LocadoraDeCarro.Infrastructure.Context;
+using LocadoraDeCarro.Utils;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,12 +15,21 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//builder.Services.AddIdentityServer()
-//		.AddInMemoryClients(Config.Clients)
-//		.AddInMemoryIdentityResources(Config.IdentityResources)
-//		.AddInMemoryApiScopes(Config.ApiScopes)
-//		.AddTestUsers(Config.TestUsers)
-//		.AddDeveloperSigningCredential(); // ATENÇÃO: apenas para ambiente DEV!
+builder.Services.AddScoped<IAluguelRepository, AluguelRepository>();
+builder.Services.AddScoped<ICarroRepository, CarroRepository>();
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+		options.UseNpgsql(builder.Configuration.GetConnectionString(Utils.ConnectionString)));
+
+// IdentityServer
+builder.Services.AddIdentityServer()
+		.AddInMemoryIdentityResources(Config.IdentityResources)
+		.AddInMemoryApiScopes(Config.ApiScopes)
+		.AddInMemoryClients(Config.Clients)
+		.AddTestUsers(Config.Users)
+		.AddDeveloperSigningCredential(); // apenas para desenvolvimento
+
+
 
 var app = builder.Build();
 
