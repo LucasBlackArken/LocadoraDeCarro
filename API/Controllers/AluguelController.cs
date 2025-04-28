@@ -1,4 +1,5 @@
 ﻿using LocadoraDeCarro.Application.Commands.Aluguel;
+using LocadoraDeCarro.Application.Query.Aluguel;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +18,12 @@ public class AlugueisController : ControllerBase
 		_mediator = mediator;
 	}
 
-	//[HttpPost]
-	//public async Task<IActionResult> Alugar([FromBody] AluguelCarroCommand command)
-	//{
-	//	var aluguelId = await _mediator.Send(command);
-	//	return CreatedAtAction(nameof(ObterPorId), new { id = aluguelId }, aluguelId);
-	//}
+	[HttpPost]
+	public async Task<IActionResult> Alugar([FromBody] AluguelCarroCommand command)
+	{
+		var aluguelId = await _mediator.Send(command);
+		return CreatedAtAction(nameof(ObterPorId), new { id = aluguelId }, aluguelId);
+	}
 
 	[HttpPost("{id}/devolver")]
 	public async Task<IActionResult> Devolver(int id)
@@ -31,21 +32,21 @@ public class AlugueisController : ControllerBase
 		return NoContent();
 	}
 
-	//[HttpGet("{id}")]
-	//public async Task<IActionResult> ObterPorId(int id)
-	//{
-	//	var aluguel = await _mediator.Send(new ObterAluguelPorIdQuery { Id = id });
-	//	if (aluguel == null)
-	//		return NotFound();
+	[HttpGet("{id}")]
+	public async Task<IActionResult> ObterPorId(int id)
+	{
+		var aluguel = await _mediator.Send(new ObterAluguelPorIdQuery { Id = id });
+		if (aluguel == null)
+			return NotFound();
 
-	//	return Ok(aluguel);
-	//}
+		return Ok(aluguel);
+	}
 
-	//[HttpGet]
-	//public async Task<IActionResult> ListarTodos()
-	//{
-	//	var alugueis = await _mediator.Send(new ListarTodosAlugueisQuery());
-	//	return Ok(alugueis);
-	//}
+	[HttpGet]
+	public async Task<IActionResult> ListarTodos()
+	{
+		var alugueis = await _mediator.Send(new ListarTodosAlugueisQuery());
+		return Ok(alugueis);
+	}
 }
 

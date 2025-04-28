@@ -10,40 +10,62 @@ public class AppDbContext : DbContext
 
 	public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-	protected override void OnModelCreating(ModelBuilder modelBuilder)
-	{
-		base.OnModelCreating(modelBuilder);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
 
-		//// Configuração da entidade Aluguel
-		//modelBuilder.Entity<Aluguel>(entity =>
-		//{
-		//	entity.ToTable("Aluguel"); // Nome da tabela
-		//	entity.HasKey(a => a.IdAluguel); // Define a chave primária
-		//	entity.Property(a => a.ValorAluguel).HasColumnType("decimal(18,2)"); // Configura o tipo decimal
-		//	entity.Property(a => a.DataRetirada).IsRequired(); // Define que a DataRetirada é obrigatória
-		//	entity.Property(a => a.DataEntrega).IsRequired(); // Define que a DataEntrega é obrigatória
-		//	entity.Property(a => a.Atraso).IsRequired(); // Define que o campo Atraso é obrigatório
-		//	entity.Property(a => a.TaxaAtraso).HasColumnType("decimal(18,2)"); // Configura o tipo decimal
-		//});
+        // Configuração da entidade Carro
+        modelBuilder.Entity<Carro>(entity =>
+        {
+            entity.ToTable("Carros"); // Nome da tabela
 
-		//// Configuração da entidade Carro
-		//modelBuilder.Entity<Carro>(entity =>
-		//{
-		//	entity.ToTable("Carros"); // Nome da tabela
-		//	entity.HasKey(c => c.IdCarro); // Define a chave primária
-		//	entity.Property(c => c.Marca).HasMaxLength(50); // Limite de 50 caracteres para a marca
-		//	entity.Property(c => c.Modelo).HasMaxLength(50); // Limite de 50 caracteres para o modelo
-		//	entity.Property(c => c.Placa).HasMaxLength(8); // Limite de 8 caracteres para a placa
-		//	entity.Property(c => c.Ano).IsRequired(); // Define que o campo Ano é obrigatório
-		//	entity.Property(c => c.Disponivel).IsRequired(); // Define que o campo Disponivel é obrigatório
-		//});
+            entity.HasKey(c => c.Id); // Define a chave primária
 
-		// Relacionamento entre Aluguel e Carro
-		modelBuilder.Entity<Aluguel>()
-				.HasOne<Carro>()
-				.WithMany()
-				.HasForeignKey("IdCarro") // Define a chave estrangeira na tabela Alugueis
-				.OnDelete(DeleteBehavior.Cascade); // Define que ao excluir um carro, os alugueis relacionados serão excluídos
-	}
+            entity.Property(c => c.Marca)
+                  .HasMaxLength(50).IsRequired();
+
+            entity.Property(c => c.Modelo)
+                  .HasMaxLength(50).IsRequired();
+
+            entity.Property(c => c.Ano)
+                  .IsRequired();
+
+            entity.Property(c => c.ValorDiaria)
+                  .IsRequired()
+                  .HasColumnType("decimal(18,2)");
+
+            entity.Property(c => c.Disponivel)
+                  .IsRequired();
+
+            // Um Carro possui vários Alugueis
+            entity.HasMany(c => c.Alugueis)
+                  .WithOne(a => a.Carro)
+                  .HasForeignKey(a => a.CarroId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Configuração da entidade Aluguel
+        modelBuilder.Entity<Aluguel>(entity =>
+        {
+            entity.ToTable("Alugueis"); // Nome da tabela
+
+            entity.HasKey(a => a.Id); // Define a chave primária
+
+            entity.Property(a => a.DataInicio)
+                  .IsRequired();
+
+            entity.Property(a => a.DataFim)
+                  .IsRequired();
+
+            entity.Property(a => a.Devolvido)
+                  .IsRequired();
+
+            entity.Property(a => a.ValorTotal)
+                  .HasColumnType("decimal(18,2)");
+
+            entity.Property(a => a.TaxaAtraso)
+                  .HasColumnType("decimal(18,2)");
+        });
+    }
 }
 
