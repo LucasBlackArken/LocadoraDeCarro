@@ -42,7 +42,7 @@ internal class Program
 
         // DbContext
         builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseSqlServer(builder.Configuration.GetConnectionString(Utils.ConnectionString)));
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 
         // Repositories
