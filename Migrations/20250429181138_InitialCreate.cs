@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,13 +15,13 @@ namespace LocadoraDeCarro.Migrations
                 name: "Carros",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Marca = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Modelo = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
-                    Ano = table.Column<int>(type: "integer", nullable: false),
-                    ValorDiaria = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
-                    Disponivel = table.Column<bool>(type: "boolean", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Marca = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Modelo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Ano = table.Column<int>(type: "int", nullable: false),
+                    ValorDiaria = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Disponivel = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -33,14 +32,14 @@ namespace LocadoraDeCarro.Migrations
                 name: "Alugueis",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CarroId = table.Column<int>(type: "integer", nullable: false),
-                    DataInicio = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Devolvido = table.Column<bool>(type: "boolean", nullable: false),
-                    ValorTotal = table.Column<decimal>(type: "numeric(18,2)", nullable: true),
-                    TaxaAtraso = table.Column<decimal>(type: "numeric(18,2)", nullable: true)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CarroId = table.Column<int>(type: "int", nullable: false),
+                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Devolvido = table.Column<bool>(type: "bit", nullable: false),
+                    ValorTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    TaxaAtraso = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {

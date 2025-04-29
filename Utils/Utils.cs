@@ -2,5 +2,5 @@
 
 public class Utils
 {
-	public static string ConnectionString = "Host=localhost;Port=5432;Database=LocadoraDb;Username=postgres;Password=12345";
+	public static string ConnectionString = @"Server=ALFA142\SQL2022;Database=LocadoraDeCarroDb;Trusted_Connection=True;TrustServerCertificate=True;";
 }

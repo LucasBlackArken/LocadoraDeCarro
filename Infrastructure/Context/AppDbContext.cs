@@ -5,10 +5,10 @@ namespace LocadoraDeCarro.Infrastructure.Context;
 
 public class AppDbContext : DbContext
 {
-	public DbSet<Aluguel> Alugueis { get; set; }
-	public DbSet<Carro> Carros { get; set; }
+    public DbSet<Aluguel> Alugueis { get; set; }
+    public DbSet<Carro> Carros { get; set; }
 
-	public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -17,27 +17,28 @@ public class AppDbContext : DbContext
         // Configuração da entidade Carro
         modelBuilder.Entity<Carro>(entity =>
         {
-            entity.ToTable("Carros"); // Nome da tabela
+            entity.ToTable("Carros");
 
-            entity.HasKey(c => c.Id); // Define a chave primária
+            entity.HasKey(c => c.Id);
 
             entity.Property(c => c.Marca)
-                  .HasMaxLength(50).IsRequired();
+                  .IsRequired()
+                  .HasMaxLength(50);
 
             entity.Property(c => c.Modelo)
-                  .HasMaxLength(50).IsRequired();
+                  .IsRequired()
+                  .HasMaxLength(50);
 
             entity.Property(c => c.Ano)
                   .IsRequired();
 
             entity.Property(c => c.ValorDiaria)
                   .IsRequired()
-                  .HasColumnType("decimal(18,2)");
+                  .HasColumnType("decimal(18,2)"); // Compatível com SQL Server
 
             entity.Property(c => c.Disponivel)
                   .IsRequired();
 
-            // Um Carro possui vários Alugueis
             entity.HasMany(c => c.Alugueis)
                   .WithOne(a => a.Carro)
                   .HasForeignKey(a => a.CarroId)
@@ -47,9 +48,9 @@ public class AppDbContext : DbContext
         // Configuração da entidade Aluguel
         modelBuilder.Entity<Aluguel>(entity =>
         {
-            entity.ToTable("Alugueis"); // Nome da tabela
+            entity.ToTable("Alugueis");
 
-            entity.HasKey(a => a.Id); // Define a chave primária
+            entity.HasKey(a => a.Id);
 
             entity.Property(a => a.DataInicio)
                   .IsRequired();
@@ -68,4 +69,3 @@ public class AppDbContext : DbContext
         });
     }
 }
-
