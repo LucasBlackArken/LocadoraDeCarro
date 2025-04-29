@@ -8,7 +8,7 @@ namespace LocadoraDeCarro.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize] // Precisa estar autenticado via IdentityServer4
+//[Authorize] // Precisa estar autenticado via IdentityServer4
 public class CarrosController : ControllerBase
 {
 	private readonly IMediator _mediator;

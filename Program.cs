@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using FluentValidation;
 using MediatR;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.AspNetCore.Builder;
 
 internal class Program
 {
@@ -39,12 +40,13 @@ internal class Program
 			c.OperationFilter<SecurityRequirementsOperationFilter>();
 		});
 
-		// DbContext
-		builder.Services.AddDbContext<AppDbContext>(opt =>
-				opt.UseNpgsql(builder.Configuration.GetConnectionString(Utils.ConnectionString)));
+        // DbContext
+        builder.Services.AddDbContext<AppDbContext>(opt =>
+    opt.UseSqlServer(builder.Configuration.GetConnectionString(Utils.ConnectionString)));
 
-		// Repositories
-		builder.Services.AddScoped<ICarroRepository, CarroRepository>();
+
+        // Repositories
+        builder.Services.AddScoped<ICarroRepository, CarroRepository>();
 		builder.Services.AddScoped<IAluguelRepository, AluguelRepository>();
 
 		// MediatR
@@ -66,27 +68,43 @@ internal class Program
 		builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 				.AddJwtBearer(options =>
 				{
-					options.Authority = "https://localhost:5001";
+					options.Authority = "https://localhost:7275";
 					options.RequireHttpsMetadata = true;
 					options.Audience = "locadora_api";
 				});
 
-		var app = builder.Build();
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSwaggerUI", policy =>
+            {
+                policy.WithOrigins("https://localhost:7275")
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
+
+
+
+        var app = builder.Build();
 
 		// Middleware pipeline
 		if (app.Environment.IsDevelopment())
 		{
 			app.UseSwagger();
-			app.UseSwaggerUI(c =>
-			{
-				c.OAuthClientId("locadora_client");
-				c.OAuthClientSecret("super_senha");
-				c.OAuthScopes("locadora_api");
-			});
-		}
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Locadora API v1");
+                c.OAuthClientId("locadora_client");
+                c.OAuthClientSecret("super_senha");
+                c.OAuthScopes("locadora_api");
+            });
 
-		app.UseRouting();
-		app.UseIdentityServer();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseRouting();
+        app.UseCors("AllowAll");
+        app.UseIdentityServer();
 		app.UseAuthentication();
 		app.UseAuthorization();
 		app.MapControllers();
