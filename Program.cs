@@ -58,11 +58,13 @@ internal class Program
 
 		// IdentityServer4
 		builder.Services
-				.AddIdentityServer()
-				.AddInMemoryIdentityResources(Config.IdentityResources)
-				.AddInMemoryApiScopes(Config.ApiScopes)
-				.AddInMemoryClients(Config.Clients)
-				.AddDeveloperSigningCredential();
+		.AddIdentityServer()
+		.AddInMemoryIdentityResources(Config.IdentityResources)
+		.AddInMemoryApiScopes(Config.ApiScopes)
+		.AddInMemoryApiResources(Config.ApiResources)
+		.AddInMemoryClients(Config.Clients)
+		.AddDeveloperSigningCredential();
+
 
 		// Authentication
 		builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -73,19 +75,21 @@ internal class Program
 					options.Audience = "locadora_api";
 				});
 
-        builder.Services.AddCors(options =>
-        {
-            options.AddPolicy("AllowSwaggerUI", policy =>
-            {
-                policy.WithOrigins("https://localhost:7275")
-                      .AllowAnyHeader()
-                      .AllowAnyMethod();
-            });
-        });
+		builder.Services.AddCors(options =>
+		{
+			options.AddPolicy("AllowAll", policy =>
+			{
+				policy
+						.AllowAnyOrigin()
+						.AllowAnyHeader()
+						.AllowAnyMethod();
+			});
+		});
 
 
 
-        var app = builder.Build();
+
+		var app = builder.Build();
 
 		// Middleware pipeline
 		if (app.Environment.IsDevelopment())
