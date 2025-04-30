@@ -1,6 +1,6 @@
 # 🚗 Locadora de Carros - API RESTful
 
-Esta aplicação é uma API para gerenciamento de uma locadora de carros, desenvolvida com ASP.NET Core 8.0, aplicando os conceitos de **DDD**, **CQRS**, **MediatR**, **FluentValidation**, **Entity Framework Core**, **IdentityServer4** (Client Credentials) e banco de dados **PostgreSQL**.
+Esta aplicação é uma API para gerenciamento de uma locadora de carros, desenvolvida com ASP.NET Core 8.0, aplicando os conceitos de **DDD**, **CQRS**, **MediatR**, **FluentValidation**, **Entity Framework Core**, **IdentityServer4** (Client Credentials) e banco de dados **SQL Server**.
 
 ---
 
@@ -8,7 +8,7 @@ Esta aplicação é uma API para gerenciamento de uma locadora de carros, desenv
 
 - ASP.NET Core 8.0
 - Entity Framework Core
-- PostgreSQL
+- SQL Server
 - FluentValidation
 - MediatR
 - IdentityServer4 (Client Credentials Flow)
