@@ -49,5 +49,5 @@ public class AluguelRepository : IAluguelRepository
 			throw new Exception("Erro ao atualizar Aluguel do Carro");
 		}
 	}
-}
+}  
 

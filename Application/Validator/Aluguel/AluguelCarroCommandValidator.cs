@@ -12,3 +12,4 @@ public class AluguelCarroCommandValidator : AbstractValidator<AluguelCarroComman
         RuleFor(x => x.DataFim).GreaterThan(x => x.DataInicio).WithMessage("A data de fim deve ser posterior à data de início.");
     }
 }
+                                                                
